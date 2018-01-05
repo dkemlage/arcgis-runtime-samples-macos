@@ -29,39 +29,39 @@ class ViewshedCameraViewController: NSViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //initialize the scene with an imagery basemap
+        // initialize the scene with an imagery basemap
         let scene = AGSScene(basemap: AGSBasemap.imagery())
         
-        //assign the scene to the scene view
-        self.sceneView.scene = scene
+        // assign the scene to the scene view
+        sceneView.scene = scene
         
-        //initialize the camera and set the viewpoint specified by the camera position
+        // initialize the camera and set the viewpoint specified by the camera position
         let camera = AGSCamera(location: AGSPoint(x: -4.49492, y: 48.3808, z: 48.2511, spatialReference: AGSSpatialReference.wgs84()), heading: 344.488, pitch: 74.1212, roll: 0)
-        self.sceneView.setViewpointCamera(camera)
+        sceneView.setViewpointCamera(camera)
         
-        //initialize the elevation source with the elevation service URL
+        // initialize the elevation source with the elevation service URL
         let elevationSrc = AGSArcGISTiledElevationSource(url: ELEVATION_SERVICE_URL)
         
-        //add the elevation source to the base surface of the scene
+        // add the elevation source to the base surface of the scene
         scene.baseSurface?.elevationSources.append(elevationSrc)
         
-        //initialize the scene layer with the scene layer URL and add it to the scene
-        let buldings = AGSArcGISSceneLayer(url: SCENE_LAYER_URL)
-        scene.operationalLayers.add(buldings)
+        // initialize the scene layer with the scene layer URL and add it to the scene
+        let buildings = AGSArcGISSceneLayer(url: SCENE_LAYER_URL)
+        scene.operationalLayers.add(buildings)
         
-        //create a viewshed from the camera with minimum and maximum distance (in meters) from the observer (camera) at which visibility will be evaluated
+        // create a viewshed from the camera with minimum and maximum distance (in meters) from the observer (camera) at which visibility will be evaluated
         viewshed = AGSLocationViewshed(camera: camera, minDistance: 1.0, maxDistance: 500.0)
         
-        //create an analysis overlay for the viewshed and to add it to the scene view
+        // create an analysis overlay for the viewshed and to add it to the scene view
         let analysisOverlay = AGSAnalysisOverlay()
         analysisOverlay.analyses.add(viewshed)
         sceneView.analysisOverlays.add(analysisOverlay)
     }
     
-    //MARK: - Actions
+    // MARK: - Actions
     
     @IBAction func updateFromCamera(_ sender: Any) {
-        //update the viewshed with the current camera
+        // update the viewshed with the current camera
         viewshed.update(from: sceneView.currentViewpointCamera())
     }
     
